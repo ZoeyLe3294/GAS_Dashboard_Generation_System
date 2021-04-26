@@ -57,7 +57,7 @@
 function onOpen() {
   SpreadsheetApp.getUi()
   .createMenu('Menu')
-  .addItem('Add New Team', 'newTeamSidebar')
+  .addItem('Run Dashboard Control Panel', 'displaySidebar')
   .addSeparator()
   .addSubMenu(SpreadsheetApp.getUi().createMenu('Update Frontend CO')
           .addItem('Initialize Update Metrics CO', 'runCOinit')
@@ -181,30 +181,3 @@ function updateEmail(){
   wfmList.forEach(function(doc){updateBackEnd(doc)})
 }
 
-
-function newTeamSidebar(){showSidebar()}
-
-function showSidebar() {
-//  var html = HtmlService.createHtmlOutputFromFile('NewTeamSidebar')
-var country = configSheet.getRange(2,startColF+1).getValue().split(',')
-      
-  var response = SpreadsheetApp.getUi()
-  .showSidebar(render('NewTeamSidebar',{country:country}).setTitle('Add New Team'))
-}
-
-//SIDEBAR FUNCTION
-
-function userClicked(info){
-//info ={}
-//info.country='Canada'
-//info.name='Courier Care'
-var country = configSheet.getRange(2,startColF+1).getValue()
-//configSheet.getRange(2,startColF+1).setValue(country+', '+info.country)
-configSheet.insertColumnsAfter(configSheet.getLastColumn(), 3)
-var lastCol=configSheet.getLastColumn()+3
-configSheet.setColumnWidth(lastCol-2, 2)
-configSheet.getRange(startRowF-2,lastCol-1).setValue(info.country+'|'+info.name)
-configSheet.getRange(startRowF,lastCol-1,1,2).setValues([['Applicable','Filter']])
-configSheet.getRange(startRowF+1,lastCol-1,configSheet.getLastRow()-startRowF-1,1).insertCheckboxes()
-configSheet.getRange(1,startColF,1,lastCol-startColF+1).mergeAcross()
-}

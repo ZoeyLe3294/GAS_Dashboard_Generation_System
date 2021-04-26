@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+<base target="_top">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+<?!= include("style-css"); ?>
+</head>
+<body style="margin:10px;padding:10px">
+
+
+<div class="input-field">
+  <select id="setupSheetDropDown">
+    <option value="" disabled selected>Choose a set up sheet</option>
+  </select>
+  <label>Setup Sheet</label>
+</div>
+<div class='input-field'>
+  <select id="fileDropDown">
+    <option value="" disabled selected>Choose a file to run</option>
+    <option id="testFile">Test File</option>
+    <option id="officialFile">Official File</option>
+  </select>
+  <label>File to Run</label>
+</div>
+<div class='input-field'>
+  <select id="functionDropDown">
+    <option value="" disabled selected>Choose a file to run</option>
+    <option id="initialize">Initialize</option>
+    <option id="updateMetric">Update Metrics</option>
+    <option id="updateContent">Update Content</option>
+    <option id="applyFormat">Apply Format</option>
+    <option id="removeFormat">Remove Format</option>
+  </select>
+  <label>File to Run</label>
+</div>
+<div class='input-field'>
+  <select id="sectionDropDown">
+    <option value="" disabled selected>Choose a section to run</option>
+  </select>
+  <label>Section to Run</label>
+</div>
+
+<!-- <div class="input-field">
+  <input id="team" type="text" class="validate">
+  <label for="team">Name the new team</label>
+</div> -->
+<button class="btn waves-effect waves-light blue darken-4" id="btn">Submit</button>
+
+
+</body>
+  <script>
+  document.getElementById("btn").disabled=true
+  function loadSetupSheet(){
+    google.script.run.withSuccessHandler(setSetupSheet).getSetupSheetDropDown()
+  }
+  function setSetupSheet(setupSheetList){
+    var item = document.getElementById("setupSheetDropDown")
+    setupSheetList.setupSheetListName.forEach(function(sheetName){
+      var option = document.createElement("option")
+      option.textContent = sheetName
+      item.appendChild(option);
+    })
+    M.FormSelect.init(item);
+  }
+  function afterFirstDropDownChange(){
+    google.script.run.withSuccessHandler(function(setupSheetList){
+      var setupSheetToRun = document.getElementById("setupSheetDropDown").value
+      var sectionArray =setupSheetList.setupSheetSections[setupSheetList.setupSheetListName.indexOf(setupSheetToRun)]
+      var item = document.getElementById("sectionDropDown")
+      sectionArray.forEach(function(r){
+        var option = document.createElement("option")
+        option.textContent = r
+        item.appendChild(option)
+      })
+      M.FormSelect.init(item)
+    }).getSetupSheetDropDown()
+  }
+  function update(res){
+  console.log(res)
+    if(res==true){document.getElementById("btn").disabled=false
+    }else{document.getElementById("btn").disabled=true}
+  }
+  
+  
+  document.getElementById("setupSheetDropDown").addEventListener("change",afterFirstDropDownChange);
+  document.addEventListener("DOMContentLoaded",loadSetupSheet)
+    document.addEventListener('DOMContentLoaded', function() {
+      var elems = document.querySelectorAll('select');
+      var instances = M.FormSelect.init(elems);
+    });
+  </script>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  
+
+</html>
+
+

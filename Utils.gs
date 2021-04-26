@@ -617,37 +617,12 @@ function SHEETNAME(option,contains_text) {
 }
 
 
-//GET LINK FROM HYPERLINK FORMULA
-function linkURL(formula){
-  return formula.match(/=hyperlink\("([^"]+)"/i)[1]
-}
-//RENDER HTML PAGE
-function render(file,argObject){
-  var tmp = HtmlService.createTemplateFromFile(file)
-  if(argObject){
-    var keys = Object.keys(argObject);
-    keys.forEach(function(key){
-      tmp[key] = argObject[key];    
-    })
-    
-  }
-  return tmp.evaluate()
-}
 
-function include(filename){
-  return HtmlService.createHtmlOutputFromFile(filename).getContent();
-}
 
-function loadPartialHTML_(partial){
-  const htmlServ = HtmlService.createTemplateFromFile(partial)
-  return htmlServ.evaluate().getContent()
-}
-function loadTeamView(){
-  return loadPartialHTML_("AddTeam")
-}
-//TEAM NAME VALIDATION
-function TeamInfoValidate(info){
-  var teamNameList = configSheet.getRange(startRowF-2,startColF,1,configSheet.getLastColumn()+1-startColF).getValues()[0]
-  var newTeamName = info.country+'|'+info.name
-  if(teamNameList.indexOf(newTeamName)==-1&&info.name!=''){return true}else{return false}
-}
+
+
+
+
+
+
+
